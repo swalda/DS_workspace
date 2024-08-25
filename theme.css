@@ -1,0 +1,75 @@
+body {
+    font-family: 'Roboto', sans-serif; /* Новый шрифт Roboto */
+    background-color: #e3f2fd; /* Голубой постельный фон для всей страницы */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.left-pane {
+    background-color: #e3f2fd; /* Голубой постельный фон */
+}
+
+.right-pane {
+    background-color: #e3f2fd; /* Голубой постельный фон */
+}
+
+.metrics, .tools {
+    background-color: #ffffff;
+}
+
+.service-icon {
+    border-radius: 50%;
+    background-color: #ffffff; /* Белый фон для иконок */
+    padding: 5px;
+}
+
+.service-status {
+    cursor: default; /* Убираем возможность ручного переключения */
+}
+
+.service-status.active {
+    background-color: #28a745; /* Зеленый цвет для активных сервисов */
+}
+
+.service-time {
+    font-size: 12px;
+    color: #555;
+}
+
+.service-button {
+    margin-left: 5px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.service-button.stop {
+    background-color: #ff4b4b;
+}
+
+.service-button.start {
+    background-color: #28a745;
+}
+
+.service-button:hover {
+    opacity: 0.8;
+}
+
+.service-name a {
+    font-weight: bold;
+    color: #0056b3; /* Спокойный оттенок синего для ссылок */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.service-name a:hover {
+    color: #003f8a; /* Темнее при наведении */
+}

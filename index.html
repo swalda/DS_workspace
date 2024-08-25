@@ -4,81 +4,233 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Toolbox Dashboard</title>
+    <link rel="stylesheet" href="/static/theme.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap'); /* Новый шрифт Roboto */
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Roboto', sans-serif;
+            background-color: #eaf4fb; /* Основной фон страницы */
             color: #333;
             margin: 0;
             padding: 0;
         }
-        .header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-        }
+
         .container {
             display: flex;
-            flex-wrap: wrap;
-            padding: 20px;
-            justify-content: space-around;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
         }
-        .card {
-            background: #fff;
+        .left-pane {
+            width: 60%;
+            background-color: #eaf4fb; /* Голубой постельный фон */
+            overflow: auto;
             padding: 20px;
+        }
+        .right-pane {
+            width: 40%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #eaf4fb; /* Голубой постельный фон */
+        }
+        .metrics {
+            background: #f5fbff; /* Фон блока с мониторингом */
+            padding: 10px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
             margin-bottom: 20px;
-            text-align: center;
+            height: 180px; /* Высота блока с мониторингом */
         }
-        .card h3 {
-            margin-bottom: 15px;
-            color: #444;
+        .tools {
+            background: #f5fbff; /* Фон блока с инструментами */
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            overflow-y: auto;
         }
-        .status {
-            font-size: 14px;
-            color: green;
-            margin-bottom: 10px;
+        .service {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #d0e7f8; /* Пастельно-голубой фон рамок инструментов */
+            border-radius: 6px;
+            padding: 6px;
+            margin-bottom: 8px; /* Уменьшаем отступ между блоками */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 40px; /* Уменьшаем высоту блоков с инструментами */
         }
-        .link {
+        .service-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            background-color: #f0faff; /* Фон иконок инструментов */
+            padding: 5px;
+            border-radius: 6px; /* Квадратная форма иконок */
+        }
+        .service-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .service-name a {
+            font-weight: bold;
+            color: #547ca1; /* Спокойный оттенок синего для ссылок */
             text-decoration: none;
-            color: #007bff;
-            font-size: 16px;
             transition: color 0.3s ease;
         }
-        .link:hover {
-            color: #0056b3;
+        .service-name a:hover {
+            color: #365980; /* Темнее при наведении */
+        }
+        .service-status {
+            margin-left: auto;
+            margin-right: 20px;
+            width: 20px;
+            height: 20px;
+            background-color: #ff4b4b; /* Красный цвет по умолчанию */
+            border-radius: 50%;
+            position: relative;
+        }
+        .service-status.active {
+            background-color: #28a745; /* Зеленый цвет для активных сервисов */
+        }
+        .service-time {
+            font-size: 12px;
+            color: #555;
+            margin-right: 10px; /* Отступ справа от времени */
+        }
+        .service-buttons {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .service-button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .service-button.stop {
+            background-color: #ff4b4b;
+        }
+        .service-button.start {
+            background-color: #28a745;
+        }
+        .service-button:hover {
+            opacity: 0.8;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>My Toolbox Dashboard</h1>
-    </div>
     <div class="container">
-        <div class="card">
-            <h3>JupyterLab</h3>
-            <div class="status">Status: Running</div>
-            <a href="/jupyterlab/" class="link" target="_blank">Open JupyterLab</a>
+        <div class="left-pane">
+            <!-- Файловый менеджер -->
+            <div id="elfinder"></div>
         </div>
-        <div class="card">
-            <h3>Code Server</h3>
-            <div class="status">Status: Running</div>
-            <a href="/code-server/" class="link" target="_blank">Open Code Server</a>
-        </div>
-        <div class="card">
-            <h3>Netdata</h3>
-            <div class="status">Status: Running</div>
-            <a href="/netdata/" class="link" target="_blank">Open Netdata</a>
-        </div>
-        <div class="card">
-            <h3>System Metrics</h3>
-            <div id="metrics">
-                <!-- Insert dynamic system metrics here -->
+        <div class="right-pane">
+            <div class="metrics">
+                <!-- Системные метрики -->
+                <div id="metrics"></div>
+            </div>
+            <div class="tools">
+                <!-- Инструменты и сервисы -->
+                <div class="service">
+                    <img src="/static/icons/jupyter-icon.png" alt="JupyterLab" class="service-icon">
+                    <div class="service-info">
+                        <div class="service-name"><a href="/jupyterlab/" target="_blank">JupyterLab</a></div>
+                    </div>
+                    <div class="service-time" id="jupyter-time">002:30:15</div>
+                    <div class="service-status" id="jupyter-status"></div>
+                    <div class="service-buttons">
+                        <button class="service-button" onclick="restartService('jupyterlab')">Restart</button>
+                        <button class="service-button stop" onclick="stopService('jupyterlab')">Stop</button>
+                        <button class="service-button start" onclick="startService('jupyterlab')">Start</button>
+                    </div>
+                </div>
+                <div class="service">
+                    <img src="/static/icons/code-server-icon.png" alt="Code Server" class="service-icon">
+                    <div class="service-info">
+                        <div class="service-name"><a href="/code-server/" target="_blank">Code Server</a></div>
+                    </div>
+                    <div class="service-time" id="code-time">001:10:45</div>
+                    <div class="service-status" id="code-status"></div>
+                    <div class="service-buttons">
+                        <button class="service-button" onclick="restartService('code-server')">Restart</button>
+                        <button class="service-button stop" onclick="stopService('code-server')">Stop</button>
+                        <button class="service-button start" onclick="startService('code-server')">Start</button>
+                    </div>
+                </div>
+                <div class="service">
+                    <img src="/static/icons/netdata-icon.png" alt="Netdata" class="service-icon">
+                    <div class="service-info">
+                        <div class="service-name"><a href="/netdata/" target="_blank">Netdata</a></div>
+                    </div>
+                    <div class="service-time" id="netdata-time">000:45:12</div>
+                    <div class="service-status active" id="netdata-status"></div>
+                    <div class="service-buttons">
+                        <button class="service-button" onclick="restartService('netdata')">Restart</button>
+                        <button class="service-button stop" onclick="stopService('netdata')">Stop</button>
+                        <button class="service-button start" onclick="startService('netdata')">Start</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/elfinder.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#elfinder').elfinder({
+                url : '/api/files/'
+            });
+
+            function updateMetrics() {
+                $.get('/api/metrics/', function(data) {
+                    $('#metrics').html(data);
+                });
+            }
+
+            function restartService(serviceName) {
+                $.post('/api/service/restart', { service_name: serviceName }, function() {
+                    alert(serviceName + ' restarted successfully!');
+                });
+            }
+
+            function stopService(serviceName) {
+                $.post('/api/service/stop', { service_name: serviceName }, function() {
+                    alert(serviceName + ' stopped successfully!');
+                    toggleStatus(serviceName, false);
+                });
+            }
+
+            function startService(serviceName) {
+                $.post('/api/service/start', { service_name: serviceName }, function() {
+                    alert(serviceName + ' started successfully!');
+                    toggleStatus(serviceName, true);
+                });
+            }
+
+            function toggleStatus(serviceName, isActive) {
+                const statusElement = $('#' + serviceName + '-status');
+                if (isActive) {
+                    statusElement.addClass('active');
+                } else {
+                    statusElement.removeClass('active');
+                }
+            }
+
+            setInterval(updateMetrics, 2000);  // Update metrics every 2 seconds
+        });
+    </script>
 </body>
 </html>

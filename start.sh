@@ -8,6 +8,10 @@ log() {
     echo "$(date) - $1" >> /var/log/my_services/startup.log
 }
 
+# Запуск FastAPI для управления файлами и сервисами
+log "Запуск FastAPI"
+exec uvicorn app.main:app --host 0.0.0.0 --port 8000 >> /var/log/my_services/fastapi.log 2>&1 &
+
 # Запуск JupyterLab из папки workspace с темой materialdarker и базовым URL /jupyterlab/
 log "Запуск JupyterLab"
 exec jupyter lab --no-browser --ip=0.0.0.0 --port=8888 --allow-root --NotebookApp.token='' --notebook-dir=/workspace --LabApp.base_url='/jupyterlab/' --LabApp.default_url='/lab?theme=JupyterLab%20Material%20Darker' >> /var/log/my_services/jupyter.log 2>&1 &
