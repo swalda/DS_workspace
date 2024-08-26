@@ -1,0 +1,26 @@
+# pydio-cells-config.yaml
+proxyconfig:
+  binds:
+    - 0.0.0.0:8085
+  reverseproxyurl: http://localhost/cells
+
+frontendlogin: admin
+frontendpassword: password
+
+dbconnectiontype: tcp
+dbtcphostname: localhost
+dbtcpport: 3306
+dbtcpname: cells
+dbtcpuser: pydio
+dbtcppassword: pydio_password
+
+# Указываем папку workspace как источник данных
+pydio.grpc.data.sync.workspace:
+  folder: /workspace
+
+pydio.grpc.data.objects.workspace:
+   LocalFolder": /workspace
+# Добавляем секцию secrets
+secrets:
+  system:
+    - "d4G8NTPvrcT39avwESYr5anXwHo4ppMG"

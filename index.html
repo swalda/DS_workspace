@@ -134,8 +134,8 @@
 <body>
     <div class="container">
         <div class="left-pane">
-            <!-- Файловый менеджер -->
-            <div id="elfinder"></div>
+            <!-- Ссылка на Pydio Cells -->
+            <iframe src="/cells/" style="width: 100%; height: 100%; border: none;"></iframe>
         </div>
         <div class="right-pane">
             <div class="metrics">
@@ -187,13 +187,8 @@
         </div>
     </div>
     <script src="/static/js/jquery.min.js"></script>
-    <script src="/static/js/elfinder.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#elfinder').elfinder({
-                url : '/api/files/'
-            });
-
             function updateMetrics() {
                 $.get('/api/metrics/', function(data) {
                     $('#metrics').html(data);
